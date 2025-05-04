@@ -1,0 +1,2 @@
+# .class files will not be added to the repository
+*.class
