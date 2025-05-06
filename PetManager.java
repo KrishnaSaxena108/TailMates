@@ -6,11 +6,13 @@ import java.io.IOException;
 
 public class PetManager {
     private CustomLinkedList<Pet> pets;
+    private PetBST petBST; // Added Binary Search Tree
     private static final String PETS_FILE = "pets.txt";
     private int nextPetId;
 
     public PetManager() {
         pets = new CustomLinkedList<>();
+        petBST = new PetBST(); // Initialize the BST
         nextPetId = 1;
     }
 
@@ -30,6 +32,7 @@ public class PetManager {
 
                     Pet pet = new Pet(id, name, species, breed, age, gender, description);
                     pets.add(pet);
+                    petBST.insert(pet); // Also add to BST
 
                     if (id >= nextPetId) {
                         nextPetId = id + 1;
@@ -61,10 +64,21 @@ public class PetManager {
 
     public void addPet(Pet pet) {
         pets.add(pet);
+        petBST.insert(pet); // Also add to BST
         savePetsToFile();
     }
 
     public boolean removePet(int petId) {
+        // Use BST for efficient lookup instead of linear search
+        Pet pet = petBST.search(petId);
+        if (pet == null) {
+            return false;
+        }
+        
+        // Remove from both data structures
+        petBST.delete(petId);
+        
+        // Remove from LinkedList
         Node<Pet> current = pets.getHead();
         Node<Pet> previous = null;
 
@@ -85,14 +99,8 @@ public class PetManager {
     }
 
     public Pet getPetById(int petId) {
-        Node<Pet> current = pets.getHead();
-        while (current != null) {
-            if (current.getData().getId() == petId) {
-                return current.getData();
-            }
-            current = current.getNext();
-        }
-        return null;
+        // Use BST for efficient lookup - O(log n) vs O(n) for linked list
+        return petBST.search(petId);
     }
 
     public void displayAvailablePets() {
@@ -103,6 +111,25 @@ public class PetManager {
 
         System.out.println("\n===== AVAILABLE PETS =====");
         Node<Pet> current = pets.getHead();
+        while (current != null) {
+            System.out.println(current.getData());
+            current = current.getNext();
+        }
+    }
+    
+    // New method to display pets sorted by specified criteria
+    public void displaySortedPets(PetSorter.SortCriteria criteria) {
+        if (pets.isEmpty()) {
+            System.out.println("No pets available for adoption.");
+            return;
+        }
+
+        System.out.println("\n===== SORTED PETS (" + criteria.toString() + ") =====");
+        
+        // Get sorted list using binary insertion sort
+        CustomLinkedList<Pet> sortedPets = PetSorter.binaryInsertionSort(pets, criteria);
+        
+        Node<Pet> current = sortedPets.getHead();
         while (current != null) {
             System.out.println(current.getData());
             current = current.getNext();

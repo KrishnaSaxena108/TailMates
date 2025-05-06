@@ -103,10 +103,11 @@ public class Main {
         while (userSession) {
             System.out.println("\n===== USER MENU =====");
             System.out.println("1. View Available Pets");
-            System.out.println("2. Adopt a Pet");
-            System.out.println("3. Add a Pet for Adoption");
-            System.out.println("4. View My Adoption History");
-            System.out.println("5. Logout");
+            System.out.println("2. View Sorted Pets");  // New option
+            System.out.println("3. Adopt a Pet");
+            System.out.println("4. Add a Pet for Adoption");
+            System.out.println("5. View My Adoption History");
+            System.out.println("6. Logout");
             System.out.print("Enter your choice: ");
 
             try {
@@ -117,15 +118,18 @@ public class Main {
                         petManager.displayAvailablePets();
                         break;
                     case 2:
-                        adoptPet(user);
+                        viewSortedPets(); // New method
                         break;
                     case 3:
-                        addPetForAdoption();
+                        adoptPet(user);
                         break;
                     case 4:
-                        adoptionManager.viewUserAdoptionHistory(user.getUsername());
+                        addPetForAdoption();
                         break;
                     case 5:
+                        adoptionManager.viewUserAdoptionHistory(user.getUsername());
+                        break;
+                    case 6:
                         userSession = false;
                         System.out.println("Logged out successfully.");
                         break;
@@ -144,10 +148,11 @@ public class Main {
         while (adminSession) {
             System.out.println("\n===== ADMIN MENU =====");
             System.out.println("1. View All Available Pets");
-            System.out.println("2. View All Adoption Records");
-            System.out.println("3. Remove a Pet from System");
-            System.out.println("4. Add a Pet to System");
-            System.out.println("5. Logout");
+            System.out.println("2. View Sorted Pets");  // New option
+            System.out.println("3. View All Adoption Records");
+            System.out.println("4. Remove a Pet from System");
+            System.out.println("5. Add a Pet to System");
+            System.out.println("6. Logout");
             System.out.print("Enter your choice: ");
 
             try {
@@ -158,15 +163,18 @@ public class Main {
                         petManager.displayAvailablePets();
                         break;
                     case 2:
-                        adoptionManager.viewAllAdoptionRecords();
+                        viewSortedPets(); // New method
                         break;
                     case 3:
-                        removePet();
+                        adoptionManager.viewAllAdoptionRecords();
                         break;
                     case 4:
-                        addPetForAdoption();
+                        removePet();
                         break;
                     case 5:
+                        addPetForAdoption();
+                        break;
+                    case 6:
                         adminSession = false;
                         System.out.println("Logged out successfully.");
                         break;
@@ -176,6 +184,44 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Please enter a valid number.");
             }
+        }
+    }
+
+    // New method to display sorted pets
+    private static void viewSortedPets() {
+        System.out.println("\n===== SORT PETS =====");
+        System.out.println("1. Sort by ID");
+        System.out.println("2. Sort by Name");
+        System.out.println("3. Sort by Age");
+        System.out.println("4. Sort by Species");
+        System.out.print("Enter your choice: ");
+        
+        try {
+            int choice = Integer.parseInt(scanner.nextLine());
+            PetSorter.SortCriteria criteria;
+            
+            switch (choice) {
+                case 1:
+                    criteria = PetSorter.SortCriteria.ID;
+                    break;
+                case 2:
+                    criteria = PetSorter.SortCriteria.NAME;
+                    break;
+                case 3:
+                    criteria = PetSorter.SortCriteria.AGE;
+                    break;
+                case 4:
+                    criteria = PetSorter.SortCriteria.SPECIES;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Defaulting to sort by ID.");
+                    criteria = PetSorter.SortCriteria.ID;
+            }
+            
+            petManager.displaySortedPets(criteria);
+            
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a number.");
         }
     }
 
