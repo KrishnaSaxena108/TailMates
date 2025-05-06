@@ -60,35 +60,8 @@ public class AdoptionManager {
         saveAdoptionsToFile();
     }
 
-    public void viewAllAdoptionRecords() {
-        if (adoptionRecords.isEmpty()) {
-            System.out.println("No adoption records found.");
-            return;
-        }
-
-        System.out.println("\n===== ADOPTION RECORDS =====");
-        Node<AdoptionRecord> current = adoptionRecords.getHead();
-        while (current != null) {
-            System.out.println(current.getData());
-            current = current.getNext();
-        }
-    }
-
-    public void viewUserAdoptionHistory(String username) {
-        boolean found = false;
-
-        System.out.println("\n===== YOUR ADOPTION HISTORY =====");
-        Node<AdoptionRecord> current = adoptionRecords.getHead();
-        while (current != null) {
-            if (current.getData().getAdopterUsername().equals(username)) {
-                System.out.println(current.getData());
-                found = true;
-            }
-            current = current.getNext();
-        }
-
-        if (!found) {
-            System.out.println("You have not adopted any pets yet.");
-        }
+    // Method to get the adoption records list (needed for UI)
+    public CustomLinkedList<AdoptionRecord> getAdoptionRecords() {
+        return adoptionRecords;
     }
 }

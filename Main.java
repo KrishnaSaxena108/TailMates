@@ -8,15 +8,16 @@ public class Main {
 
     public static void main(String[] args) {
         initializeSystem();
-
+        ConsoleUI.printWelcomeAnimation();
+        
         boolean running = true;
         while (running) {
-            System.out.println("\n===== PET ADOPTION SYSTEM =====");
-            System.out.println("1. Login as User");
-            System.out.println("2. Login as Admin");
-            System.out.println("3. Register as User");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
+            ConsoleUI.printHeader("PET ADOPTION SYSTEM");
+            ConsoleUI.printMenuItem(1, "Login as User");
+            ConsoleUI.printMenuItem(2, "Login as Admin");
+            ConsoleUI.printMenuItem(3, "Register as User");
+            ConsoleUI.printMenuItem(4, "Exit");
+            ConsoleUI.printPrompt("Enter your choice:");
 
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
@@ -33,13 +34,13 @@ public class Main {
                         break;
                     case 4:
                         running = false;
-                        System.out.println("Thank you for using Pet Adoption System!");
+                        ConsoleUI.printSuccess("Thank you for using Pet Adoption System!");
                         break;
                     default:
-                        System.out.println("Invalid choice. Please try again.");
+                        ConsoleUI.printError("Invalid choice. Please try again.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                ConsoleUI.printError("Please enter a valid number.");
             }
         }
     }
@@ -51,74 +52,89 @@ public class Main {
     }
 
     private static void userLogin() {
-        System.out.print("Enter username: ");
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("USER LOGIN");
+        
+        ConsoleUI.printPrompt("Enter username:");
         String username = scanner.nextLine();
-        System.out.print("Enter password: ");
+        ConsoleUI.printPrompt("Enter password:");
         String password = scanner.nextLine();
 
         User user = auth.authenticateUser(username, password);
         if (user != null) {
-            System.out.println("Login successful! Welcome " + user.getName());
+            ConsoleUI.printSuccess("Login successful! Welcome " + user.getName());
+            ConsoleUI.pauseExecution();
             userMenu(user);
         } else {
-            System.out.println("Invalid username or password.");
+            ConsoleUI.printError("Invalid username or password.");
+            ConsoleUI.pauseExecution();
         }
     }
 
     private static void adminLogin() {
-        System.out.print("Enter admin username: ");
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("ADMIN LOGIN");
+        
+        ConsoleUI.printPrompt("Enter admin username:");
         String username = scanner.nextLine();
-        System.out.print("Enter admin password: ");
+        ConsoleUI.printPrompt("Enter admin password:");
         String password = scanner.nextLine();
 
         if (auth.authenticateAdmin(username, password)) {
-            System.out.println("Admin login successful!");
+            ConsoleUI.printSuccess("Admin login successful!");
+            ConsoleUI.pauseExecution();
             adminMenu();
         } else {
-            System.out.println("Invalid admin credentials.");
+            ConsoleUI.printError("Invalid admin credentials.");
+            ConsoleUI.pauseExecution();
         }
     }
 
     private static void registerUser() {
-        System.out.print("Enter name: ");
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("USER REGISTRATION");
+        
+        ConsoleUI.printPrompt("Enter name:");
         String name = scanner.nextLine();
-        System.out.print("Enter username: ");
+        ConsoleUI.printPrompt("Enter username:");
         String username = scanner.nextLine();
-        System.out.print("Enter password: ");
+        ConsoleUI.printPrompt("Enter password:");
         String password = scanner.nextLine();
-        System.out.print("Enter contact number: ");
+        ConsoleUI.printPrompt("Enter contact number:");
         String contact = scanner.nextLine();
 
         User newUser = new User(name, username, password, contact);
         if (auth.registerUser(newUser)) {
-            System.out.println("Registration successful! You can now login.");
+            ConsoleUI.printSuccess("Registration successful! You can now login.");
         } else {
-            System.out.println("Username already exists. Please choose a different username.");
+            ConsoleUI.printError("Username already exists. Please choose a different username.");
         }
+        ConsoleUI.pauseExecution();
     }
 
     private static void userMenu(User user) {
         boolean userSession = true;
 
         while (userSession) {
-            System.out.println("\n===== USER MENU =====");
-            System.out.println("1. View Available Pets");
-            System.out.println("2. View Sorted Pets");  // New option
-            System.out.println("3. Adopt a Pet");
-            System.out.println("4. Add a Pet for Adoption");
-            System.out.println("5. View My Adoption History");
-            System.out.println("6. Logout");
-            System.out.print("Enter your choice: ");
+            ConsoleUI.clearScreen();
+            ConsoleUI.printHeader("USER MENU - " + user.getName());
+            ConsoleUI.printMenuItem(1, "View Available Pets");
+            ConsoleUI.printMenuItem(2, "View Sorted Pets");
+            ConsoleUI.printMenuItem(3, "Adopt a Pet");
+            ConsoleUI.printMenuItem(4, "Add a Pet for Adoption");
+            ConsoleUI.printMenuItem(5, "View My Adoption History");
+            ConsoleUI.printMenuItem(6, "Logout");
+            ConsoleUI.printPrompt("Enter your choice:");
 
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
                     case 1:
-                        petManager.displayAvailablePets();
+                        displayAvailablePets();
                         break;
                     case 2:
-                        viewSortedPets(); // New method
+                        viewSortedPets();
                         break;
                     case 3:
                         adoptPet(user);
@@ -127,17 +143,20 @@ public class Main {
                         addPetForAdoption();
                         break;
                     case 5:
-                        adoptionManager.viewUserAdoptionHistory(user.getUsername());
+                        viewUserAdoptionHistory(user);
                         break;
                     case 6:
                         userSession = false;
-                        System.out.println("Logged out successfully.");
+                        ConsoleUI.printSuccess("Logged out successfully.");
+                        ConsoleUI.pauseExecution();
                         break;
                     default:
-                        System.out.println("Invalid choice. Please try again.");
+                        ConsoleUI.printError("Invalid choice. Please try again.");
+                        ConsoleUI.pauseExecution();
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                ConsoleUI.printError("Please enter a valid number.");
+                ConsoleUI.pauseExecution();
             }
         }
     }
@@ -146,27 +165,28 @@ public class Main {
         boolean adminSession = true;
 
         while (adminSession) {
-            System.out.println("\n===== ADMIN MENU =====");
-            System.out.println("1. View All Available Pets");
-            System.out.println("2. View Sorted Pets");  // New option
-            System.out.println("3. View All Adoption Records");
-            System.out.println("4. Remove a Pet from System");
-            System.out.println("5. Add a Pet to System");
-            System.out.println("6. Logout");
-            System.out.print("Enter your choice: ");
+            ConsoleUI.clearScreen();
+            ConsoleUI.printHeader("ADMIN MENU");
+            ConsoleUI.printMenuItem(1, "View All Available Pets");
+            ConsoleUI.printMenuItem(2, "View Sorted Pets");
+            ConsoleUI.printMenuItem(3, "View All Adoption Records");
+            ConsoleUI.printMenuItem(4, "Remove a Pet from System");
+            ConsoleUI.printMenuItem(5, "Add a Pet to System");
+            ConsoleUI.printMenuItem(6, "Logout");
+            ConsoleUI.printPrompt("Enter your choice:");
 
             try {
                 int choice = Integer.parseInt(scanner.nextLine());
 
                 switch (choice) {
                     case 1:
-                        petManager.displayAvailablePets();
+                        displayAvailablePets();
                         break;
                     case 2:
-                        viewSortedPets(); // New method
+                        viewSortedPets();
                         break;
                     case 3:
-                        adoptionManager.viewAllAdoptionRecords();
+                        displayAllAdoptionRecords();
                         break;
                     case 4:
                         removePet();
@@ -176,25 +196,49 @@ public class Main {
                         break;
                     case 6:
                         adminSession = false;
-                        System.out.println("Logged out successfully.");
+                        ConsoleUI.printSuccess("Logged out successfully.");
+                        ConsoleUI.pauseExecution();
                         break;
                     default:
-                        System.out.println("Invalid choice. Please try again.");
+                        ConsoleUI.printError("Invalid choice. Please try again.");
+                        ConsoleUI.pauseExecution();
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Please enter a valid number.");
+                ConsoleUI.printError("Please enter a valid number.");
+                ConsoleUI.pauseExecution();
             }
         }
     }
 
-    // New method to display sorted pets
+    // Improved method to display available pets
+    private static void displayAvailablePets() {
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("AVAILABLE PETS");
+        
+        if (petManager.getPetCount() == 0) {
+            ConsoleUI.printInfo("No pets available for adoption.");
+            ConsoleUI.pauseExecution();
+            return;
+        }
+
+        Node<Pet> current = petManager.getPets().getHead();
+        while (current != null) {
+            ConsoleUI.printPetCard(current.getData());
+            current = current.getNext();
+        }
+        
+        ConsoleUI.pauseExecution();
+    }
+
+    // Improved method for viewing sorted pets
     private static void viewSortedPets() {
-        System.out.println("\n===== SORT PETS =====");
-        System.out.println("1. Sort by ID");
-        System.out.println("2. Sort by Name");
-        System.out.println("3. Sort by Age");
-        System.out.println("4. Sort by Species");
-        System.out.print("Enter your choice: ");
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("SORT PETS");
+        ConsoleUI.printMenuItem(1, "Sort by ID");
+        ConsoleUI.printMenuItem(2, "Sort by Name");
+        ConsoleUI.printMenuItem(3, "Sort by Age");
+        ConsoleUI.printMenuItem(4, "Sort by Species");
+        ConsoleUI.printPrompt("Enter your choice:");
         
         try {
             int choice = Integer.parseInt(scanner.nextLine());
@@ -214,33 +258,105 @@ public class Main {
                     criteria = PetSorter.SortCriteria.SPECIES;
                     break;
                 default:
-                    System.out.println("Invalid choice. Defaulting to sort by ID.");
+                    ConsoleUI.printError("Invalid choice. Defaulting to sort by ID.");
                     criteria = PetSorter.SortCriteria.ID;
             }
             
-            petManager.displaySortedPets(criteria);
+            displaySortedPets(criteria);
             
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a number.");
+            ConsoleUI.printError("Invalid input. Please enter a number.");
+            ConsoleUI.pauseExecution();
         }
     }
 
-    private static void adoptPet(User user) {
-        petManager.displayAvailablePets();
-
+    // Helper method to display sorted pets
+    private static void displaySortedPets(PetSorter.SortCriteria criteria) {
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("SORTED PETS BY " + criteria.toString());
+        
         if (petManager.getPetCount() == 0) {
-            System.out.println("No pets available for adoption.");
+            ConsoleUI.printInfo("No pets available for adoption.");
+            ConsoleUI.pauseExecution();
             return;
         }
 
-        System.out.print("Enter the ID of the pet you want to adopt: ");
+        // Get sorted list using binary insertion sort
+        CustomLinkedList<Pet> sortedPets = PetSorter.binaryInsertionSort(petManager.getPets(), criteria);
+        
+        Node<Pet> current = sortedPets.getHead();
+        while (current != null) {
+            ConsoleUI.printPetCard(current.getData());
+            current = current.getNext();
+        }
+        
+        ConsoleUI.pauseExecution();
+    }
+
+    // Improved method to view user adoption history
+    private static void viewUserAdoptionHistory(User user) {
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("YOUR ADOPTION HISTORY");
+        
+        boolean found = false;
+        Node<AdoptionRecord> current = adoptionManager.getAdoptionRecords().getHead();
+        
+        while (current != null) {
+            if (current.getData().getAdopterUsername().equals(user.getUsername())) {
+                ConsoleUI.printAdoptionRecord(current.getData());
+                found = true;
+            }
+            current = current.getNext();
+        }
+
+        if (!found) {
+            ConsoleUI.printInfo("You have not adopted any pets yet.");
+        }
+        
+        ConsoleUI.pauseExecution();
+    }
+
+    // Improved method to display all adoption records (admin only)
+    private static void displayAllAdoptionRecords() {
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("ALL ADOPTION RECORDS");
+        
+        if (adoptionManager.getAdoptionRecords().isEmpty()) {
+            ConsoleUI.printInfo("No adoption records found.");
+            ConsoleUI.pauseExecution();
+            return;
+        }
+
+        Node<AdoptionRecord> current = adoptionManager.getAdoptionRecords().getHead();
+        while (current != null) {
+            ConsoleUI.printAdoptionRecord(current.getData());
+            current = current.getNext();
+        }
+        
+        ConsoleUI.pauseExecution();
+    }
+
+    private static void adoptPet(User user) {
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("ADOPT A PET");
+        
+        displayAvailablePets();
+
+        if (petManager.getPetCount() == 0) {
+            return; // Already showed message in displayAvailablePets
+        }
+
+        ConsoleUI.printPrompt("Enter the ID of the pet you want to adopt:");
         try {
             int petId = Integer.parseInt(scanner.nextLine());
             Pet pet = petManager.getPetById(petId);
 
             if (pet != null) {
-                System.out.println("You are adopting: " + pet.getName() + " (" + pet.getSpecies() + ")");
-                System.out.print("Confirm adoption (y/n): ");
+                ConsoleUI.clearScreen();
+                ConsoleUI.printHeader("CONFIRM ADOPTION");
+                ConsoleUI.printPetCard(pet);
+                ConsoleUI.printInfo("You are adopting: " + pet.getName() + " (" + pet.getSpecies() + ")");
+                ConsoleUI.printPrompt("Confirm adoption (y/n):");
                 String confirm = scanner.nextLine();
 
                 if (confirm.equalsIgnoreCase("y")) {
@@ -248,60 +364,71 @@ public class Main {
                             user.getContact());
                     adoptionManager.addAdoptionRecord(record);
                     petManager.removePet(petId);
-                    System.out.println("Congratulations! You have successfully adopted " + pet.getName() + ".");
+                    ConsoleUI.printSuccess("Congratulations! You have successfully adopted " + pet.getName() + ".");
                 } else {
-                    System.out.println("Adoption cancelled.");
+                    ConsoleUI.printInfo("Adoption cancelled.");
                 }
             } else {
-                System.out.println("Pet with ID " + petId + " not found.");
+                ConsoleUI.printError("Pet with ID " + petId + " not found.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid pet ID.");
+            ConsoleUI.printError("Please enter a valid pet ID.");
         }
+        
+        ConsoleUI.pauseExecution();
     }
 
     private static void addPetForAdoption() {
-        System.out.print("Enter pet name: ");
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("ADD A PET FOR ADOPTION");
+        
+        ConsoleUI.printPrompt("Enter pet name:");
         String name = scanner.nextLine();
-        System.out.print("Enter pet species (dog/cat/bird/etc.): ");
+        ConsoleUI.printPrompt("Enter pet species (dog/cat/bird/etc.):");
         String species = scanner.nextLine();
-        System.out.print("Enter pet breed: ");
+        ConsoleUI.printPrompt("Enter pet breed:");
         String breed = scanner.nextLine();
-        System.out.print("Enter pet age: ");
+        ConsoleUI.printPrompt("Enter pet age:");
         int age = 0;
         try {
             age = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Invalid age. Setting age to 0.");
+            ConsoleUI.printError("Invalid age. Setting age to 0.");
         }
-        System.out.print("Enter pet gender (M/F): ");
+        ConsoleUI.printPrompt("Enter pet gender (M/F):");
         String gender = scanner.nextLine();
-        System.out.print("Enter pet description: ");
+        ConsoleUI.printPrompt("Enter pet description:");
         String description = scanner.nextLine();
 
         Pet newPet = new Pet(petManager.getNextPetId(), name, species, breed, age, gender, description);
         petManager.addPet(newPet);
-        System.out.println("Pet added successfully!");
+        ConsoleUI.printSuccess("Pet added successfully!");
+        
+        ConsoleUI.pauseExecution();
     }
 
     private static void removePet() {
-        petManager.displayAvailablePets();
+        ConsoleUI.clearScreen();
+        ConsoleUI.printHeader("REMOVE A PET");
+        
+        displayAvailablePets();
 
         if (petManager.getPetCount() == 0) {
-            System.out.println("No pets available in the system.");
-            return;
+            return; // Already showed message in displayAvailablePets
         }
 
-        System.out.print("Enter the ID of the pet you want to remove: ");
+        ConsoleUI.printPrompt("Enter the ID of the pet you want to remove:");
         try {
             int petId = Integer.parseInt(scanner.nextLine());
             if (petManager.removePet(petId)) {
-                System.out.println("Pet removed successfully.");
+                ConsoleUI.printSuccess("Pet removed successfully.");
             } else {
-                System.out.println("Pet with ID " + petId + " not found.");
+                ConsoleUI.printError("Pet with ID " + petId + " not found.");
             }
         } catch (NumberFormatException e) {
-            System.out.println("Please enter a valid pet ID.");
+            ConsoleUI.printError("Please enter a valid pet ID.");
         }
+        
+        ConsoleUI.pauseExecution();
     }
 }
