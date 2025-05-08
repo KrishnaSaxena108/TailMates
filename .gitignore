@@ -1,2 +1,5 @@
 # .class files will not be added to the repository
 *.class
+
+# csv files will not be added to the repository
+*.csv

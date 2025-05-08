@@ -6,13 +6,11 @@ import java.io.IOException;
 
 public class PetManager {
     private CustomLinkedList<Pet> pets;
-    private PetBST petBST; // Binary Search Tree
-    private static final String PETS_FILE = "pets.txt";
+    private static final String PETS_FILE = "pets.csv";
     private int nextPetId;
 
     public PetManager() {
         pets = new CustomLinkedList<>();
-        petBST = new PetBST(); // Initialize the BST
         nextPetId = 1;
     }
 
@@ -32,7 +30,6 @@ public class PetManager {
 
                     Pet pet = new Pet(id, name, species, breed, age, gender, description);
                     pets.add(pet);
-                    petBST.insert(pet); // Also add to BST
 
                     if (id >= nextPetId) {
                         nextPetId = id + 1;
@@ -64,21 +61,25 @@ public class PetManager {
 
     public void addPet(Pet pet) {
         pets.add(pet);
-        petBST.insert(pet); // Also add to BST
         savePetsToFile();
     }
 
-    public boolean removePet(int petId) {
-        // Use BST for efficient lookup instead of linear search
-        Pet pet = petBST.search(petId);
-        if (pet == null) {
-            return false;
+    // Method to update a pet
+    public void updatePet(Pet updatedPet) {
+        Node<Pet> current = pets.getHead();
+
+        while (current != null) {
+            if (current.getData().getId() == updatedPet.getId()) {
+                // Replace the pet data with updated data
+                current.setData(updatedPet);
+                savePetsToFile();
+                return;
+            }
+            current = current.getNext();
         }
-        
-        // Remove from both data structures
-        petBST.delete(petId);
-        
-        // Remove from LinkedList
+    }
+
+    public boolean removePet(int petId) {
         Node<Pet> current = pets.getHead();
         Node<Pet> previous = null;
 
@@ -99,13 +100,28 @@ public class PetManager {
     }
 
     public Pet getPetById(int petId) {
-        // Use BST for efficient lookup - O(log n) vs O(n) for linked list
-        return petBST.search(petId);
+        Node<Pet> current = pets.getHead();
+        while (current != null) {
+            if (current.getData().getId() == petId) {
+                return current.getData();
+            }
+            current = current.getNext();
+        }
+        return null;
     }
 
-    // Method to get the pets linked list (needed for UI)
-    public CustomLinkedList<Pet> getPets() {
-        return pets;
+    public void displayAvailablePets() {
+        if (pets.isEmpty()) {
+            System.out.println("No pets available for adoption.");
+            return;
+        }
+
+        System.out.println("\n===== AVAILABLE PETS =====");
+        Node<Pet> current = pets.getHead();
+        while (current != null) {
+            System.out.println(current.getData());
+            current = current.getNext();
+        }
     }
 
     public int getPetCount() {
@@ -120,5 +136,9 @@ public class PetManager {
 
     public int getNextPetId() {
         return nextPetId++;
+    }
+
+    public CustomLinkedList<Pet> getPets() {
+        return pets;
     }
 }

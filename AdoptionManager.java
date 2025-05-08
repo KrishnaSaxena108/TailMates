@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class AdoptionManager {
     private CustomLinkedList<AdoptionRecord> adoptionRecords;
-    private static final String ADOPTIONS_FILE = "adoptions.txt";
+    private static final String ADOPTIONS_FILE = "adoptions.csv";
 
     public AdoptionManager() {
         adoptionRecords = new CustomLinkedList<>();

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Authentication {
     private CustomLinkedList<User> users;
-    private static final String USERS_FILE = "users.txt";
+    private static final String USERS_FILE = "users.csv";
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
 
