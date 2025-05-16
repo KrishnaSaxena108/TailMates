@@ -53,40 +53,22 @@ public class ConsoleUI {
     public static void printMenuItem(int number, String description) {
         System.out.println(BOLD + YELLOW + "  " + number + ". " + RESET + description);
     }
-    
-    /**
-     * Prints a formatted pet card
+      /**
+     * Prints a formatted pet card in a single line format
      */
     public static void printPetCard(Pet pet) {
-        int width = 60;
-        String line = "-".repeat(width);
+        // Single line format for compact display
+        System.out.println(
+            BOLD + "#" + pet.getId() + ": " + 
+            GREEN + pet.getName() + RESET + BOLD + 
+            " (" + pet.getGender() + ")" + RESET + " | " +
+            YELLOW + pet.getSpecies() + RESET + " - " + 
+            pet.getBreed() + ", Age: " + pet.getAge() + " | " +
+            "Desc: " + pet.getDescription()
+        );
         
-        System.out.println(CYAN + line + RESET);
-        
-        // ID and Name header
-        System.out.println(BOLD + "│ #" + pet.getId() + ": " + 
-                          GREEN + pet.getName() + RESET + BOLD + 
-                          " (" + pet.getGender() + ")" + RESET);
-        
-        // Species and breed
-        System.out.println("│ " + YELLOW + pet.getSpecies() + RESET + 
-                          " - " + pet.getBreed() + 
-                          ", Age: " + pet.getAge());
-        
-        // Description with word wrapping
-        System.out.println("│");
-        System.out.println("│ " + BOLD + "Description:" + RESET);
-        
-        // Simple word wrapping for description
-        String desc = pet.getDescription();
-        int maxLineLength = width - 4; // accounting for "│ " prefix
-        
-        for (int i = 0; i < desc.length(); i += maxLineLength) {
-            String line1 = desc.substring(i, Math.min(desc.length(), i + maxLineLength));
-            System.out.println("│ " + line1);
-        }
-        
-        System.out.println(CYAN + line + RESET);
+        // Add a simple separator
+        System.out.println("─".repeat(80));
     }
     
     /**

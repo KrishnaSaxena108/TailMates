@@ -138,9 +138,7 @@ public class Main {
             ConsoleUI.printError("Username already exists. Please choose a different username.");
         }
         ConsoleUI.pauseExecution();
-    }
-
-    private static void userMenu(User user) {
+    }    private static void userMenu(User user) {
         boolean userSession = true;
 
         while (userSession) {
@@ -150,15 +148,12 @@ public class Main {
             ConsoleUI.printMenuItem(2, "View Sorted Pets");
             ConsoleUI.printMenuItem(3, "Adopt a Pet");
             ConsoleUI.printMenuItem(4, "Add a Pet for Adoption");
-            ConsoleUI.printMenuItem(5, "Update Pet Details");
-            ConsoleUI.printMenuItem(6, "View My Adoption History");
-            ConsoleUI.printMenuItem(7, "Logout");
+            ConsoleUI.printMenuItem(5, "View My Adoption History");
+            ConsoleUI.printMenuItem(6, "Logout");
             ConsoleUI.printPrompt("Enter your choice:");
 
             try {
-                int choice = Integer.parseInt(scanner.nextLine());
-
-                switch (choice) {
+                int choice = Integer.parseInt(scanner.nextLine());                switch (choice) {
                     case 1:
                         displayAvailablePets();
                         break;
@@ -172,12 +167,9 @@ public class Main {
                         addPetForAdoption();
                         break;
                     case 5:
-                        updatePetDetails();
-                        break;
-                    case 6:
                         viewUserAdoptionHistory(user);
                         break;
-                    case 7:
+                    case 6:
                         userSession = false;
                         ConsoleUI.printSuccess("Logged out successfully.");
                         ConsoleUI.pauseExecution();
@@ -244,12 +236,10 @@ public class Main {
                 ConsoleUI.pauseExecution();
             }
         }
-    }
-
-    // Method to update pet details
+    }    // Method to update pet details - Admin only
     private static void updatePetDetails() {
         ConsoleUI.clearScreen();
-        ConsoleUI.printHeader("UPDATE PET DETAILS");
+        ConsoleUI.printHeader("UPDATE PET DETAILS - ADMIN ONLY");
 
         if (petManager.getPetCount() == 0) {
             ConsoleUI.printInfo("No pets available to update.");
