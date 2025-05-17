@@ -119,16 +119,16 @@ public class Main {
         } while (!InputValidator.isValidName(username));
 
         // Get password with masking
-        String password = readMaskedPassword("Enter password:");
-
-        // Validate phone number
+        String password = readMaskedPassword("Enter password:");        // Validate phone number
         String contact;
+        boolean firstPhoneAttempt = true;
         do {
             ConsoleUI.printPrompt("Enter contact number (10 digits starting with 6, 7, 8, or 9):");
             contact = scanner.nextLine();
-            if (!InputValidator.isValidPhoneNumber(contact)) {
+            if (!InputValidator.isValidPhoneNumber(contact) && !firstPhoneAttempt) {
                 ConsoleUI.printError("Invalid phone number. Must be 10 digits and start with 6, 7, 8, or 9.");
             }
+            firstPhoneAttempt = false;
         } while (!InputValidator.isValidPhoneNumber(contact));
 
         User newUser = new User(name, username, password, contact);
