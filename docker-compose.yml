@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  tailmates:
+    build: .
+    container_name: tailmates-app
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./data:/app/data
+    environment:
+      - JAVA_OPTS=-Xmx512m

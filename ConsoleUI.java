@@ -119,26 +119,13 @@ public class ConsoleUI {
      * Simple ASCII art animation for the welcome screen
      */
     public static void printWelcomeAnimation() {
-        clearScreen();
         try {
-            String[] frames = {
-                "  /\\_/\\\n (o.o )\n  > ^ <  Welcome to Pet Adoption System",
-                "  /\\_/\\\n (^.^ )\n  > ^ <  Welcome to Pet Adoption System",
-                "  /\\_/\\\n (-.o )\n  > ^ <  Welcome to Pet Adoption System",
-                "  /\\_/\\\n (^.^ )\n  > ^ <  Welcome to Pet Adoption System"
-            };
-            
-            for (int i = 0; i < 5; i++) {
-                for (String frame : frames) {
-                    clearScreen();
-                    System.out.println(CYAN + frame + RESET);
-                    Thread.sleep(200);
-                }
-            }
+            String welcome = "  /\\_/\\\n (^.^ )\n  > ^ <  Welcome to Pet Adoption System\n";
+            System.out.println(CYAN + welcome + RESET);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             // Do nothing on interrupted exception
         }
-        clearScreen();
     }
     
     /**

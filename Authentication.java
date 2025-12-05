@@ -25,7 +25,7 @@ public class Authentication {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Users file not found. Creating a new one.");
+            // System.out.println("Initializing users database...");
             try {
                 new FileWriter(USERS_FILE).close();
             } catch (IOException ex) {

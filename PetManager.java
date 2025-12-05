@@ -37,7 +37,7 @@ public class PetManager {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            System.out.println("Pets file not found or corrupted. Creating a new one.");
+            // System.out.println("Initializing pets database...");
             try {
                 new FileWriter(PETS_FILE).close();
             } catch (IOException ex) {

@@ -33,7 +33,7 @@ public class AdoptionManager {
                 }
             }
         } catch (IOException | NumberFormatException e) {
-            System.out.println("Adoptions file not found or corrupted. Creating a new one.");
+            // System.out.println("Initializing adoptions database...");
             try {
                 new FileWriter(ADOPTIONS_FILE).close();
             } catch (IOException ex) {
